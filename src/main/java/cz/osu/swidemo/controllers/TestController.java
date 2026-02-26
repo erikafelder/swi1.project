@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cz.osu.swidemo.repositories.UserRepository;
 
 // Add UUID for unique usernames.
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,7 +32,11 @@ public class TestController {
         userRepository.save(user);
 
         return "Hello from Test Controller";
-
-
     }
+
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
 }
