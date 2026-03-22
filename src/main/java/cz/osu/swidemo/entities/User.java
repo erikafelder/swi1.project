@@ -100,4 +100,11 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
 }

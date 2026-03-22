@@ -1,5 +1,6 @@
 package cz.osu.swidemo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.GenerationType;
 
@@ -21,6 +22,7 @@ public class Book {
     @JoinColumn(name = "author_id")
     private Author author;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "books")
     private List<User> users = new ArrayList<>();
 
