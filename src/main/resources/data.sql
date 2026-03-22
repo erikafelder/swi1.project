@@ -16,4 +16,8 @@ INSERT INTO book (id, title, author_id) VALUES
 (2, 'Konec civilizace', 2),
 (3, 'Příběh služebnice',3 );
 
+INSERT INTO loan (user_id, book_id) VALUES
+ ('550e8400-e29b-41d4-a716-446655440001', 1),
+ ('550e8400-e29b-41d4-a716-446655440001', 2),
+ ('550e8400-e29b-41d4-a716-446655440002', 3);
 
