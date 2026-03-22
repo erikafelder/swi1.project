@@ -1,9 +1,10 @@
 package cz.osu.swidemo.entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.GenerationType;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -11,18 +12,17 @@ import java.util.Set;
 public class Book {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "book_author" ,
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id")
-    )
-private Set<Author> authors = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
+
+    @ManyToMany(mappedBy = "books")
+    private List<User> users = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -39,12 +39,19 @@ private Set<Author> authors = new HashSet<>();
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public Set<Author> getAuthors() {
-        return authors;
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setAuthors(Set<Author> authors) {
-        this.authors = authors;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
 }

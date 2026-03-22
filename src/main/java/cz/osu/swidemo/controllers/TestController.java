@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping("/api/test")  //kdyz React posle request na http://localhost:8080/api/test 
 public class TestController {
 
     @Autowired
