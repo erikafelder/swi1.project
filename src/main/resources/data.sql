@@ -5,3 +5,15 @@ INSERT INTO users (id, username, password, age, email, first_name, last_name) VA
                                                                                   ('550e8400-e29b-41d4-a716-446655440003', 'bob_wilson', '$2a$10$slYQmyNdGzin7olVN3p5be4nxQjV2d9dGvQGAlt28WjLdMZGd7rOG', 45, 'bob.wilson@example.com', 'Bob', 'Wilson'),
                                                                                   ('550e8400-e29b-41d4-a716-446655440004', 'alice_johnson', '$2a$10$slYQmyNdGzin7olVN3p5be4nxQjV2d9dGvQGAlt28WjLdMZGd7rOG', 31, 'alice.johnson@example.com', 'Alice', 'Johnson'),
                                                                                   ('550e8400-e29b-41d4-a716-446655440005', 'charlie_brown', '$2a$10$slYQmyNdGzin7olVN3p5be4nxQjV2d9dGvQGAlt28WjLdMZGd7rOG', 26, 'charlie.brown@example.com', 'Charlie', 'Brown');
+
+INSERT INTO author (id, name) VALUES
+(1, 'Robert Bryndza'),
+(2, 'Aldous Huxley'),
+(3, 'Margaret Atwood');
+
+INSERT INTO book (id, title, author_id) VALUES
+(1, 'Propast smrti', 1),
+(2, 'Konec civilizace', 2),
+(3, 'Příběh služebnice',3 );
+
+
