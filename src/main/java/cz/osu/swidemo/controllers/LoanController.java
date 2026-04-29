@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*") //povoleny pristup vsem
 @RestController
 @RequestMapping("/api/loans")
 public class LoanController {
@@ -20,9 +21,10 @@ public class LoanController {
     @GetMapping("/user/{userId}")
     public List<Book> getBooksByUser(@PathVariable String userId) {
         Optional<User> user = userRepository.findById(userId);
+
         if (user.isPresent()) {
             return user.get().getBooks();
         }
         return List.of();
     }
-}
+    }

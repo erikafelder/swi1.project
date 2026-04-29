@@ -2,58 +2,46 @@ package cz.osu.swidemo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.persistence.GenerationType;
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Entity
 @Table(name = "book")
 public class Book {
+
+    public boolean isLoaned() {
+        return !loanedByUsers.isEmpty();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
+    private String isbn;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "books")
-    private List<User> users = new ArrayList<>();
+    @JsonIgnore  // zabrání infinite loop při serializaci
+    private List<User> loanedByUsers = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
+    // --- GETTERY A SETTERY ---
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public Author getAuthor() {
-        return author;
-    }
+    public String getIsbn() { return isbn; }
+    public void setIsbn(String isbn) { this.isbn = isbn; }
 
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-    public List<User> getUsers() {
-        return users;
-    }
+    public Author getAuthor() { return author; }
+    public void setAuthor(Author author) { this.author = author; }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
+    public List<User> getLoanedByUsers() { return loanedByUsers; }
+    public void setLoanedByUsers(List<User> users) { this.loanedByUsers = users; }
 }
