@@ -1,8 +1,9 @@
 package cz.osu.swidemo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -13,7 +14,6 @@ public class User {
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
 
-    // POZOR: Na tvém screenu z DB se sloupec jmenuje user_name, v Javě chceme username
     @Column(name = "user_name", nullable = false, unique = true, length = 50)
     private String username;
 
@@ -35,21 +35,11 @@ public class User {
     @Column(name = "role")
     private String role = "USER";
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Loan> loans = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "loan",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    private List<Book> books = new ArrayList<>();
-
-    public User() {
-    }
-
-    // --- GETTERY A SETTERY (ČISTÉ) ---
+    public User() {}
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -72,10 +62,9 @@ public class User {
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public List<Book> getBooks() { return books; }
-    public void setBooks(List<Book> books) { this.books = books; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public void addBook(Book book) {
-        this.books.add(book);
-    }
+    public Set<Loan> getLoans() { return loans; }
+    public void setLoans(Set<Loan> loans) { this.loans = loans; }
 }

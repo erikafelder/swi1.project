@@ -33,13 +33,17 @@ public class UserService {
     }
 
     public Optional<User> authenticate(String username, String rawPassword) {
-        return userRepository.findByUsername(username)
+        return userRepository.findFirstByUsername(username)
                 .filter(user -> passwordEncoder.matches(rawPassword, user.getPassword()));
     }
 
     public User registerNewUser(User user) {
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(hashedPassword);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (user.getRole() == null || user.getRole().isBlank()) {
+            user.setRole("USER");
+        }
+
         return userRepository.save(user);
     }
 }

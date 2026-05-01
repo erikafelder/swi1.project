@@ -2,9 +2,11 @@ package cz.osu.swidemo;
 
 import cz.osu.swidemo.entities.Author;
 import cz.osu.swidemo.entities.Book;
+import cz.osu.swidemo.entities.Loan;
 import cz.osu.swidemo.entities.User;
 import cz.osu.swidemo.repositories.AuthorRepository;
 import cz.osu.swidemo.repositories.BookRepository;
+import cz.osu.swidemo.repositories.LoanRepository;
 import cz.osu.swidemo.repositories.UserRepository;
 import cz.osu.swidemo.services.BookService;
 import org.junit.jupiter.api.Test;
@@ -13,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,14 +23,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
 
-    @Mock
-    private BookRepository bookRepository;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private AuthorRepository authorRepository;
+    @Mock private BookRepository bookRepository;
+    @Mock private UserRepository userRepository;
+    @Mock private AuthorRepository authorRepository;
+    @Mock private LoanRepository loanRepository;
 
     @InjectMocks
     private BookService bookService;
@@ -57,27 +54,28 @@ public class BookServiceTest {
 
         Book result = bookService.createBook("Kniha", "Existující Autor");
 
-        assertEquals("Existující Autor", result.getAuthor().getName());
+        assertFalse(result.getAuthors().isEmpty());
         verify(authorRepository, never()).save(any(Author.class));
     }
 
     @Test
-    void testLoanBook_addsBookToUser() {
+    void testLoanBook_createsLoan() {
         Book book = new Book();
         book.setId(1L);
 
         User user = new User();
         user.setId("user-1");
-        user.setBooks(new ArrayList<>());
 
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
         when(userRepository.findById("user-1")).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(loanRepository.save(any(Loan.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        bookService.loanBook(1L, "user-1");
+        Loan result = bookService.loanBook(1L, "user-1");
 
-        assertTrue(user.getBooks().contains(book));
-        verify(userRepository, times(1)).save(user);
+        assertNotNull(result);
+        assertEquals(book, result.getBook());
+        assertEquals(user, result.getUser());
+        verify(loanRepository, times(1)).save(any(Loan.class));
     }
 
     @Test
