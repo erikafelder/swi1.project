@@ -43,8 +43,7 @@ public class UserServiceTest {
         user.setUsername("testuser");
         user.setPassword("$2a$10$abcdefghijklmnopqrstuuVGOiA736MXPyN7EUGMmVoJpnNnPRpEi");
 
-        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(user));
-
+        when(userRepository.findFirstByUsername("testuser")).thenReturn(Optional.of(user));
         Optional<User> result = userService.authenticate("testuser", "wrongpassword");
 
         assertTrue(result.isEmpty());
@@ -52,7 +51,7 @@ public class UserServiceTest {
 
     @Test
     void testAuthenticate_userNotFound_returnsEmpty() {
-        when(userRepository.findByUsername("neexistuje")).thenReturn(Optional.empty());
+        when(userRepository.findFirstByUsername("neexistuje")).thenReturn(Optional.empty());
 
         Optional<User> result = userService.authenticate("neexistuje", "heslo");
 
